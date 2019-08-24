@@ -1,10 +1,19 @@
 class AttributeClassification:
     def __init__(self, attribute, classification):
-        self.attibute = attribute
+        self.attribute = attribute
         self.classification = classification
 
     def __str__(self) -> str:
-        return str(self.attibute) + " " + str(self.classification)
+        return str(self.attribute) + " " + str(self.classification)
+
+
+class TrainingDataElement:
+    def __init__(self, attributes, classification):
+        self.attributes = attributes
+        self.classification = classification
+
+    def __str__(self):
+        return str(self.attributes) + " " + str(self.classification)
 
 
 def compute(training_data, attributes_to_evaluate):
@@ -47,14 +56,12 @@ def calculate_attributes_frequencies(training_data, attributes_to_evaluate, clas
         attribute_frequency_for_classification = [0] * attribute_amount
         attributes_total = [0] * attribute_amount
 
-        for training_data_element in training_data:
+        for training_data_element in filter(lambda element: element.classification == classification, training_data):
 
-            if training_data_element.classification == classification:
-
-                for i in range(0, attribute_amount):
-                    attributes_total[i] += 1
-                    if attributes_to_evaluate[i] == training_data_element.attributes[i]:
-                        attribute_frequency_for_classification[i] += 1
+            for i in range(0, attribute_amount):
+                attributes_total[i] += 1
+                if attributes_to_evaluate[i] == training_data_element.attributes[i]:
+                    attribute_frequency_for_classification[i] += 1
 
         for i in range(0, attribute_amount):
             attribute_classification_pair = AttributeClassification(attributes_to_evaluate[i], classification)
@@ -67,12 +74,10 @@ def calculate_attributes_frequencies(training_data, attributes_to_evaluate, clas
 def calculate_vnb(classification_frequencies, attributes_frequencies):
     probabilities = classification_frequencies.copy()
 
-    for attribute_classification_pair in attributes_frequencies:
+    for classification in classification_frequencies:
 
-        for classification in classification_frequencies:
+        for attribute_classification_pair in filter(lambda pair: pair.classification == classification, attributes_frequencies):
 
-            if attribute_classification_pair.classification == classification:
-
-                probabilities[classification] *= attributes_frequencies[attribute_classification_pair]
+            probabilities[classification] *= attributes_frequencies[attribute_classification_pair]
 
     return max(probabilities, key=probabilities.get)

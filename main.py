@@ -1,12 +1,6 @@
 import csv
 from bayes import compute
-
-
-class TrainingDataElement:
-    def __init__(self, attributes, classification):
-        self.attributes = attributes
-        self.classification = classification
-
+from bayes import TrainingDataElement
 
 training_data = []
 
