@@ -13,12 +13,13 @@ training_data = []
 different_words_average = 0
 i = 0
 
-with open("aa_bayes.tsv") as tsvfile:
+with open("aa_bayes.tsv", encoding='utf-8') as tsvfile:
     tsv_reader = csv.reader(tsvfile, delimiter="\t")
     next(tsv_reader)
-
+    count = 0
     for line in tsv_reader:
-        if len(line) == 4:
+        if len(line) == 4 and count < 50000:
             words = line[TITLE].upper().split()
-            words = list(filter(lambda word: word not in WORDS_TO_IGNORE, words))
+            words = list(map(lambda word: (word, 1), filter(lambda word: word not in WORDS_TO_IGNORE, words)))
             training_data.append(TrainingDataElement(words, line[CLASSIFICATION]))
+            count += 1
