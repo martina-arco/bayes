@@ -53,10 +53,4 @@ for index in sorted(testing, reverse=True):
 
 nb = NaiveBayes()
 nb.train(training_data3, 2)
-count = 0
-for test in testing_data:
-    most_likely = nb.classify(test.attributes)
-    if test.classification == most_likely[0]:
-        count += 1
-
-print("Got ", count/len(testing_data))
+matrix = nb.get_confusion_matrix(testing_data)

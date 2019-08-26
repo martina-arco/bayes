@@ -69,3 +69,80 @@ class NaiveBayes:
                 probabilities[classification] *= probability
         most_likely = max(probabilities, key=probabilities.get)
         return most_likely, probabilities[most_likely]
+
+    # matrix[prediction][actual]
+    def get_confusion_matrix(self, testing_data):
+
+        matrix = {}
+        for classification in self.classification_sizes.keys():
+            matrix[classification] = {}
+            for other in self.classification_sizes.keys():
+                matrix[classification][other] = 0
+
+        for test in testing_data:
+            most_likely = self.classify(test.attributes)
+            matrix[most_likely[0]][test.classification] += 1
+
+        return matrix
+
+    def get_accuracy(self, confusion_matrix):
+        accuracy = 0
+        denominator = 0
+
+        for classification in confusion_matrix.keys():
+            accuracy += confusion_matrix[classification][classification]
+            denominator += confusion_matrix[classification][classification]
+            for other, value in confusion_matrix[classification].items():
+                if other != classification:
+                    denominator += value
+
+        return accuracy/denominator
+
+    def get_precision(self, confusion_matrix):
+        precision = {}
+
+        for classification in confusion_matrix.keys():
+            precision[classification] = confusion_matrix[classification][classification]
+            denominator = confusion_matrix[classification][classification]
+            for other, value in confusion_matrix[classification].items():
+                if other != classification:
+                    denominator += value
+            precision[classification] /= denominator
+        return precision
+
+    def get_recall(self, confusion_matrix):
+        recall = {}
+
+        for classification in confusion_matrix.keys():
+            recall[classification] = confusion_matrix[classification][classification]
+            denominator = confusion_matrix[classification][classification]
+            for other, value in confusion_matrix.items():
+                if other != classification:
+                    denominator += value[classification]
+            recall[classification] /= denominator
+        return recall
+
+    def get_f1(self, confusion_matrix):
+        p = self.get_precision(confusion_matrix)
+        r = self.get_recall(confusion_matrix)
+        f1 = {}
+
+        for classification in p:
+            f1[classification] = (2 * p[classification] * r[classification]) / (p[classification] * r[classification])
+        return f1
+
+    def true_positive(self, confusion_matrix):
+        return self.get_recall(confusion_matrix)
+
+
+    def false_positive(self, confusion_matrix):
+        fp = {}
+
+        for classification in confusion_matrix.keys():
+            fp[classification] = confusion_matrix[classification][classification]
+            denominator = confusion_matrix[classification][classification]
+            for other in confusion_matrix[classification].keys():
+                if other != classification:
+                    denominator += confusion_matrix[other][other]
+            fp[classification] /= denominator
+        return fp
