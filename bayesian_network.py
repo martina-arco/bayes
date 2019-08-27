@@ -6,6 +6,7 @@ class BayesianNetwork:
         self.gre_probabilities = {}
         self.admit_probabilities = {}
         self.total_amount_rank_gpa_gre = {}
+        self.rank_frequencies = {}
 
     def calculate_probabilities(self, variables):
         total_amount = 0
@@ -34,6 +35,7 @@ class BayesianNetwork:
 
             total_amount += 1
 
+        self.rank_frequencies = rank_frequencies
         for frequency in rank_frequencies.items():
             self.rank_probabilities[frequency[0]] = frequency[1] / total_amount
 
@@ -42,7 +44,7 @@ class BayesianNetwork:
         calculate_probability(admit_frequencies, self.total_amount_rank_gpa_gre, self.admit_probabilities, 2)
 
     def get_joint_probability(self, admit, gpa, gre, rank):
-        return self.rank_probabilities[rank] * self.gpa_probabilities[(gpa, rank)] * self.gre_probabilities[(gre, rank)] * \
+        return self.rank_probabilities[rank] * self.get_gpa_probability(gpa, rank) * self.get_gre_probability(gre, rank) * \
                  self.get_admit_probability(admit, gpa, gre, rank)
 
     def get_admit_probability(self, admit, gpa, gre, rank):
@@ -50,6 +52,22 @@ class BayesianNetwork:
 
         if probability is None:
             probability = 1 / (self.total_amount_rank_gpa_gre.get((rank, gpa, gre), 0) + 2)
+
+        return probability
+
+    def get_gre_probability(self, gre, rank):
+        probability = self.gre_probabilities.get((gre, rank))
+
+        if probability is None:
+            probability = 1 / (self.rank_frequencies.get(rank, 0) + 2)
+
+        return probability
+
+    def get_gpa_probability(self, gpa, rank):
+        probability = self.gpa_probabilities.get((gpa, rank))
+
+        if probability is None:
+            probability = 1 / (self.rank_frequencies.get(rank, 0) + 2)
 
         return probability
 

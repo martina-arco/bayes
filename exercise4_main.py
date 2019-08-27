@@ -37,6 +37,6 @@ admit = 0
 
 result = bayesian_network.get_joint_probability(admit, gpa, gre, rank) / denominator
 
-print("b. Probability of being admitted going to rank 2 school, gre 450 and gpa 3.5:", result)
+print("b. Probability of being admitted going to rank 2 school, with gre 450 and gpa 3.5:", result)
 
 
