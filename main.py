@@ -3,7 +3,7 @@ import random
 
 from naive_bayes import TrainingDataElement
 from naive_bayes import NaiveBayes
-from text_classifier import training_data as training_data3
+from text_classifier import data as text_classifier_data
 
 training_data = []
 training_data2 = []
@@ -44,13 +44,13 @@ print("Exercise 2, class predicted is: {0} with probability {1:.3f}%\n".format(m
 
                 ############################# EXERCISE 3 #############################
 
-testing = random.sample(range(0, len(training_data3) - 1), int(len(training_data3) * 0.1))
+testing = random.sample(range(0, len(text_classifier_data) - 1), int(len(text_classifier_data) * 0.1))
 testing_data = []
 for index in sorted(testing, reverse=True):
-    testing_data.append(training_data3.pop(index))
+    testing_data.append(text_classifier_data.pop(index))
 
 nb = NaiveBayes()
-nb.train(training_data3, 2)
+nb.train(text_classifier_data, 2)
 matrix = nb.get_confusion_matrix(testing_data)
 accuracy = nb.get_accuracy(matrix)
 precision = nb.get_precision(matrix)
