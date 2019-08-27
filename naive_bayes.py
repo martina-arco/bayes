@@ -128,7 +128,7 @@ class NaiveBayes:
         f1 = {}
 
         for classification in p:
-            f1[classification] = (2 * p[classification] * r[classification]) / (p[classification] * r[classification])
+            f1[classification] = (2 * p[classification] * r[classification]) / (p[classification] + r[classification])
         return f1
 
     def true_positive(self, confusion_matrix):
