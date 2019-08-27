@@ -1,8 +1,7 @@
 import csv
 import random
 
-from bayes import compute
-from bayes import TrainingDataElement
+from naive_bayes import TrainingDataElement
 from naive_bayes import NaiveBayes
 from text_classifier import training_data as training_data3
 
@@ -24,9 +23,6 @@ with open('PreferenciasBritanicos.csv') as csvfile:
 attributes_to_evaluate = [1, 0, 1, 1, 0]
 attributes_to_evaluate2 = [(attributes[0], 1), (attributes[1], 0), (attributes[2], 1), (attributes[3], 1), (attributes[4], 0)]
 
-print("Class predicted is:", compute(training_data, attributes_to_evaluate))
-
-
                 ############################# EXERCISE 1 #############################
 probabilities = {("P1", 1): {"Joven": 0.95, "Viejo": 0.03}, ("P2", 1): {"Joven": 0.05, "Viejo": 0.82},
                  ("P3", 1): {"Joven": 0.02, "Viejo": 0.34}, ("P4", 1): {"Joven": 0.2, "Viejo": 0.92},
@@ -36,13 +32,15 @@ probabilities = {("P1", 1): {"Joven": 0.95, "Viejo": 0.03}, ("P2", 1): {"Joven":
 nb = NaiveBayes()
 nb.set_probabilities({"Joven": 0.1, "Viejo": 0.9}, probabilities)
 most_likely = nb.classify([("P1", 1), ("P3", 1), ("P2", 0), ("P4", 0)])
-print("Exercise 1, class predicted is: {0} with probability {1:.3f}%".format(most_likely[0], most_likely[1] * 100))
+print("EXERCISE 1")
+print("Class predicted is: {0} with probability {1:.3f}%\n".format(most_likely[0], most_likely[1] * 100))
 
                 ############################# EXERCISE 2 #############################
 nb = NaiveBayes()
 nb.train(training_data2, 2)
 most_likely = nb.classify(attributes_to_evaluate2)
-print("Exercise 2, class predicted is: {0} with probability {1:.3f}%".format(most_likely[0], most_likely[1] * 100))
+print("EXERCISE 2")
+print("Exercise 2, class predicted is: {0} with probability {1:.3f}%\n".format(most_likely[0], most_likely[1] * 100))
 
                 ############################# EXERCISE 3 #############################
 
@@ -61,19 +59,35 @@ f1 = nb.get_f1(matrix)
 tp = nb.true_positive(matrix)
 fp = nb.false_positive(matrix)
 
+print("EXERCISE 3")
 print("Accuracy: ", accuracy)
 
+print("\nPrecision")
 for classification, value in precision.items():
-    print("Precision for class ", classification, ": ", value)
+    print("Precision for class", classification, ": ", value)
 
+print("\nRecall")
 for classification, value in recall.items():
-    print("Recall for class ", classification, ": ", value)
+    print("Recall for class", classification, ": ", value)
 
+print("\nF1-score")
 for classification, value in f1.items():
-    print("F1 for class ", classification, ": ", value)
+    print("F1 for class", classification, ": ", value)
 
+print("\nTrue positives")
 for classification, value in tp.items():
-    print("True positive for class ", classification, ": ", value)
+    print("True positive for class", classification, ": ", value)
 
+print("\nFalse positives")
 for classification, value in fp.items():
-    print("False positive for class ", classification, ": ", value)
+    print("False positive for class", classification, ": ", value)
+
+print("\nConfusion matrix")
+print('{:15.15}'.format(' '), end=' ')
+string = ' '.join(['{:^15.15}'.format(item) for item in matrix.keys()])
+print(string)
+
+for classification in matrix.items():
+    print('{:15.15}'.format(classification[0]), end="")
+    string = ' '.join(['{:^15}'.format(item) for item in classification[1].values()])
+    print(string)

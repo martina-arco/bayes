@@ -1,3 +1,12 @@
+class TrainingDataElement:
+    def __init__(self, attributes, classification):
+        self.attributes = attributes
+        self.classification = classification
+
+    def __str__(self):
+        return str(self.attributes) + " " + str(self.classification)
+
+
 class NaiveBayes:
 
     def __init__(self):
@@ -72,7 +81,6 @@ class NaiveBayes:
 
     # matrix[prediction][actual]
     def get_confusion_matrix(self, testing_data):
-
         matrix = {}
         for classification in self.classification_sizes.keys():
             matrix[classification] = {}
@@ -133,7 +141,6 @@ class NaiveBayes:
 
     def true_positive(self, confusion_matrix):
         return self.get_recall(confusion_matrix)
-
 
     def false_positive(self, confusion_matrix):
         fp = {}

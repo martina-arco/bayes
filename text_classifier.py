@@ -1,5 +1,5 @@
 import csv
-from bayes import TrainingDataElement
+from naive_bayes import TrainingDataElement
 
 DATE = 0
 TITLE = 1
@@ -18,8 +18,10 @@ with open("aa_bayes.tsv", encoding='utf-8') as tsvfile:
     next(tsv_reader)
     count = 0
     for line in tsv_reader:
-        if len(line) == 4 and count < 50000:
+        if len(line) == 4 and count < 37000:
             words = line[TITLE].upper().split()
             words = list(map(lambda word: (word, 1), filter(lambda word: word not in WORDS_TO_IGNORE, words)))
-            training_data.append(TrainingDataElement(words, line[CLASSIFICATION]))
-            count += 1
+            classification = line[CLASSIFICATION]
+            if classification != "Destacadas" and classification != "Noticias destacadas":
+                training_data.append(TrainingDataElement(words, classification))
+                count += 1
