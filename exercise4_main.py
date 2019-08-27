@@ -33,7 +33,7 @@ denominator = 0
 for admit in [0, 1]:
     denominator += bayesian_network.get_joint_probability(admit, gpa, gre, rank)
 
-admit = 0
+admit = 1
 
 result = bayesian_network.get_joint_probability(admit, gpa, gre, rank) / denominator
 
