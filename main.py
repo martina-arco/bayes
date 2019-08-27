@@ -54,3 +54,26 @@ for index in sorted(testing, reverse=True):
 nb = NaiveBayes()
 nb.train(training_data3, 2)
 matrix = nb.get_confusion_matrix(testing_data)
+accuracy = nb.get_accuracy(matrix)
+precision = nb.get_precision(matrix)
+recall = nb.get_recall(matrix)
+f1 = nb.get_f1(matrix)
+tp = nb.true_positive(matrix)
+fp = nb.false_positive(matrix)
+
+print("Accuracy: ", accuracy)
+
+for classification, value in precision.items():
+    print("Precision for class ", classification, ": ", value)
+
+for classification, value in recall.items():
+    print("Recall for class ", classification, ": ", value)
+
+for classification, value in f1.items():
+    print("F1 for class ", classification, ": ", value)
+
+for classification, value in tp.items():
+    print("True positive for class ", classification, ": ", value)
+
+for classification, value in fp.items():
+    print("False positive for class ", classification, ": ", value)
