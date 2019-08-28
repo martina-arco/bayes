@@ -28,12 +28,15 @@ probabilities = {("P1", 1): {"Joven": 0.95, "Viejo": 0.03}, ("P2", 1): {"Joven":
                  ("P3", 1): {"Joven": 0.02, "Viejo": 0.34}, ("P4", 1): {"Joven": 0.2, "Viejo": 0.92},
                  ("P1", 0): {"Joven": 0.05, "Viejo": 0.87}, ("P2", 0): {"Joven": 0.95, "Viejo": 0.18},
                  ("P3", 0): {"Joven": 0.98, "Viejo": 0.66}, ("P4", 0): {"Joven": 0.8, "Viejo": 0.08}}
+old_probability = 0.9
 
-nb = NaiveBayes()
-nb.set_probabilities({"Joven": 0.1, "Viejo": 0.9}, probabilities)
-most_likely = nb.classify([("P1", 1), ("P3", 1), ("P2", 0), ("P4", 0)])
 print("EXERCISE 1")
-print("Class predicted is: {0} with probability {1:.3f}%\n".format(most_likely[0], most_likely[1] * 100))
+data_young_probability = probabilities[("P1", 1)]["Joven"] * probabilities[("P2", 0)]["Joven"] \
+                         * probabilities[("P3", 1)]["Joven"] * probabilities[("P4", 0)]["Joven"] * (1 - old_probability)
+data_old_probability = probabilities[("P1", 1)]["Viejo"] * probabilities[("P2", 0)]["Viejo"] \
+                         * probabilities[("P3", 1)]["Viejo"] * probabilities[("P4", 0)]["Viejo"] * old_probability
+print("Young viewer probability = {0:.3f}\n".format(data_young_probability / (data_young_probability + data_old_probability)))
+print("Old viewer probability = {0:.3f}\n".format(data_old_probability / (data_young_probability + data_old_probability)))
 
                 ############################# EXERCISE 2 #############################
 nb = NaiveBayes()
